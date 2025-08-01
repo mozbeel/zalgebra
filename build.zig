@@ -20,12 +20,17 @@ pub fn build(b: *Build) void {
         .root_source_file = b.path("src/main.zig"),
     });
 
-    // Creates a step for unit testing. This only builds the test executable
-    // but does not run it.
-    const main_tests = b.addTest(.{
+    const main_tests_mod = b.addModule("main_tests", .{
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
+    });
+
+    // Creates a step for unit testing. This only builds the test executable
+    // but does not run it.
+    const main_tests = b.addTest(.{
+        .name = "main_tests",
+        .root_module = main_tests_mod,
     });
 
     const run_main_tests = b.addRunArtifact(main_tests);
